@@ -1,40 +1,68 @@
+Here is the updated README, with the conflicting safety-rule and `keep_alive` claims removed. It preserves the distinction between implemented code, mock demonstrations, and unverified live inference.
+
+Copy it into `README.md`. Update the **verification** section only after running the actual local model.
+
+````markdown
 # Rasta — Pause. Verify. Proceed.
 
 A mobile-first, bilingual English / Roman Urdu decision-support prototype
-for Pakistani WhatsApp users facing suspicious requests for money or
+for Pakistani WhatsApp users receiving suspicious requests for money or
 login verification codes.
 
-Built for the Meta Global AI Developer Hackathon, Indie Track.
+Built for the Meta Global AI Developer Hackathon — Indie Track.
 Submission platform: Cerebral Valley.
 
-> Rasta turns a suspicious message into a clearer next step:
-> pause, verify independently, and document what you confirmed.
+> Rasta helps families pause, verify independently, and document what
+> they confirmed—before they decide to pay.
 
 ---
 
-## Overview
+## The Problem
 
-An urgent message arrives:
+A message arrives from a supposed relative using a new number:
 
-> “Ammi, mera phone kharab ho gaya hai. Main naye number se baat kar
-> raha hoon. Emergency hai, Rs 50000 bhej dein. Kisi ko mat batana.”
+>“Mom, my phone broke. I’m calling from a new number. It’s an emergency, send Rs 50,000. Don’t tell anyone.”
 
-Should the recipient send money, ignore the request, or verify it first?
+The example is fictional, but the decision it creates is important:
+respond immediately, or pause to verify?
 
-Rasta helps the user examine the message without presenting a model’s
-judgment as certainty. It highlights quoted warning signals, explains
-what remains unknown, suggests a calm reply, and guides independent
-verification.
+Suspicious requests can combine urgency, secrecy, family relationships,
+or claims of authority. The recipient needs more than a warning label;
+they need a clear next step.
 
-The application is a structured workflow, not a chatbot.
+Rasta focuses on that moment of decision.
 
-### Advisory only
+It does not claim that WhatsApp has more account compromises than other
+platforms or present unverified national fraud statistics.
+
+---
+
+## What Rasta Does
+
+Rasta is a structured workflow, not a chatbot.
+
+Users paste a message or select a clearly labeled synthetic example.
+In Ollama mode, a locally running Meta Llama model generates an assessment
+containing:
+
+- Observed facts.
+- A concern band.
+- Warning signals supported by quoted message text.
+- Uncertainty and missing context.
+- Recommended actions.
+- A polite reply to copy.
+
+For possible family impersonation, Rasta offers a manual independent
+verification workflow. Users can record their own verification outcome
+and export an advisory incident record.
+
+### Advisory Only
 
 Rasta cannot:
 
 - Block payments.
 - Recover compromised accounts.
-- Prove a sender’s identity.
+- Prove the sender’s identity.
 - Determine whether a voice is genuine.
 - Read WhatsApp conversations automatically.
 - Guarantee that a request is safe or fraudulent.
@@ -43,164 +71,148 @@ It does not automatically contact, accuse, or report anyone.
 
 ---
 
-## Why This Project Exists
+## Current Status
 
-Suspicious messages can create pressure before a person has time to
-verify the request.
+This repository contains an implemented prototype with separate Ollama
+and mock providers.
 
-A supposed relative may claim to be using a new number. A supposed bank
-representative may ask for a login code. Urgency, secrecy, and authority
-claims can make the next decision difficult.
+**Live model inference has not yet been verified in the recorded test
+results below.**
 
-Rasta focuses on that decision point.
-
-Its proposed contribution is not simply another warning label. It
-connects message analysis to practical actions:
-
-1. Examine the evidence.
-2. Understand uncertainty.
-3. Avoid responding under pressure.
-4. Verify through a previously known, independent channel.
-5. Record what the user actually confirmed.
-
-This project does not claim that WhatsApp has more account compromises
-than other platforms, and it does not present unverified national fraud
-statistics.
-
----
-
-## Current Implementation Status
-
-| Component | Status |
+| Component | Current status |
 |---|---|
-| Text-input and synthetic-example workflow | Implemented; see testing notes |
-| Local Ollama provider | Implemented; live inference not yet verified |
-| Mock provider | Implemented for predefined synthetic examples |
+| Text input and synthetic examples | Implemented |
+| Local Ollama provider | Implemented; live execution not yet verified |
+| Mock provider | Implemented for predefined synthetic cases |
 | Structured-output validation | Implemented |
-| Manual family-verification workflow | Implemented; manual browser testing pending |
+| Evidence-quote checks | Implemented |
+| Manual family-verification workflow | Implemented |
 | User-recorded verification timeline | Implemented |
 | Print-friendly incident export | Implemented |
 | English / Roman Urdu interface | Implemented; language review pending |
-| Persistent database and authentication | Not implemented |
-| Firebase integration | Deferred |
+| Manual browser smoke testing | Pending |
+| Authentication and persistent database | Not implemented |
+| Firebase | Deferred |
 | Screenshot and voice analysis | Deferred |
 
-These implementation statements should be checked against the repository
-before submission.
-
-A provider adapter being implemented is not proof that a model has
-successfully run. The live-test section below records that distinction.
+Implementation does not imply that every feature has been manually
+verified on the target Windows machine.
 
 ---
 
 ## How It Works
 
-1. Paste a suspicious message or select a synthetic example.
-2. In Ollama mode, the backend submits the message to the configured
-   local Meta Llama model.
-3. The model returns a structured assessment containing:
-   - Observed facts.
-   - A concern band.
-   - Quoted warning signals.
-   - Uncertainty and missing context.
-   - Recommended actions.
-   - A suggested safe reply.
-4. The backend validates the result before displaying it.
-5. For possible family impersonation, the user can open Family
-   Verification.
-6. The user records the outcome of their independent check.
-7. The user can export an advisory incident record.
+1. Paste a suspicious message or load a synthetic example.
+2. Choose the interface language.
+3. In Ollama mode, click **Analyze with local Meta model**.
+4. The backend validates and applies best-effort redaction to the input.
+5. The configured local Meta Llama model returns a structured assessment.
+6. The backend validates the result and checks its evidence quotes.
+7. Review the warning signals, uncertainty, safe reply, and next actions.
+8. If relevant, open Family Verification and perform an independent check.
+9. Record what you personally confirmed.
+10. Export an incident record or delete the temporary case.
 
-A technical failure is displayed as “Processing failed,” not disguised
-as a successful assessment.
+A technical failure is shown as **Processing failed**, not disguised as
+an assessment of insufficient evidence.
 
 ---
 
-## Meta Model Statement
+## Meta Model Usage
 
-This project is configured to use Meta Llama through Ollama on the
-developer’s local Windows machine.
+### Configuration
 
-- Default configured tag: `llama3.2:3b`
-- Explicit smaller-model option: `llama3.2:1b`
-- Runtime: Ollama
-- Inference endpoint: local `/api/chat`
-- Hosted model APIs: none
-- Non-Meta model calls: none
-- Automatic fallback inference: none
+- Model family: Meta Llama.
+- Default configured Ollama tag: `llama3.2:3b`.
+- Explicit smaller-model option: `llama3.2:1b`.
+- Runtime: Ollama.
+- Execution location: developer’s local Windows PC.
+- Model endpoint: local Ollama `/api/chat`.
+- Hosted model APIs: none.
+- Non-Meta model calls: none.
+- Automatic fallback inference: none.
 
-**Exact model tag successfully tested: none yet.**
+### Live Verification
 
-See [docs/live-test-log.md](docs/live-test-log.md). Update the tested
-model statement only after completing a real inference run.
+**Exact model tag successfully tested: none recorded yet.**
 
-### Why Local Open-Weight Inference?
+See [docs/live-test-log.md](docs/live-test-log.md).
 
-The developer is based in Pakistan. Following guidance received from
-the event team regarding access restrictions on Meta’s hosted Model
-API, this project uses the local open-weight route instead.
+After a successful live run, update this section with:
 
-Ollama is the runtime. Meta Llama is the model intended to perform the
-analysis.
+- Exact model tag.
+- Available model identifier or digest.
+- Test date.
+- Target-machine details.
+- Observed latency.
+- Cases tested.
+- Known output or language failures.
 
-The configured application does not require a paid cloud-model API or
-Meta Model API credits.
+Do not replace “not tested” with the configured default unless that model
+has actually completed an inference request.
 
-### Model Configuration Controls
+### Why Local Meta Models?
+
+The developer is based in Pakistan and received guidance from the event
+team to use eligible Meta open-weight models on locally provided compute
+instead of the geographically restricted hosted Model API.
+
+Local execution also fits the sensitivity of the evidence. Users may be
+examining private family messages, so the prototype is configured to
+perform analysis without a cloud-model request.
+
+The trade-off is limited compute. Rasta therefore focuses on short text
+inputs, bounded output, and one active inference at a time.
+
+Ollama is the runtime; Meta Llama is the model performing analysis.
+
+### Configuration Guards
 
 The backend:
 
-- Requires a loopback `OLLAMA_BASE_URL`.
-- Rejects model configuration that does not match its allowed
-  `llama*` tag pattern.
-- Selects the provider from server configuration, not client input.
+- Requires `OLLAMA_BASE_URL` to be loopback.
+- Requires `OLLAMA_MODEL` to match its allowed `llama*` tag pattern.
+- Selects the provider from server configuration, not a client request.
 
-The tag-prefix check is a configuration guard, not cryptographic proof
-of model provenance. Before submission, verify the installed model and
-record the exact tag and available model identifier in the live-test log.
+A tag-prefix check is not proof of model provenance. Verify the installed
+model and record its exact identity before submission.
 
-Meeting a model-use requirement does not guarantee final acceptance,
+Using the specified model route does not guarantee final acceptance,
 judging scores, or a prize.
 
 ---
 
-## Synthetic Inputs vs. Real Inference
+## Synthetic Inputs and Mock Assessments
 
-The demonstration messages are fictional and clearly labeled.
+Synthetic input and simulated inference are different.
 
 ### Ollama Mode
 
-Selecting an example loads its input text only.
+Selecting an example loads its fictional input text only.
 
-Clicking “Analyze with local Meta model” requests actual inference from
-the configured local model. The application displays the validated
-response, not a predefined assessment.
+Clicking Analyze sends the text to the configured local model. The
+assessment must come from the actual returned response.
 
-Custom messages are also supported in this mode.
+Custom text is supported in this mode.
 
-This describes the implemented execution path; successful live execution
-still needs to be verified.
+If the model is unavailable, times out, or returns invalid output after
+one correction retry, the application shows an error.
+
+It does not silently substitute a predefined assessment.
 
 ### Mock Mode
 
-Mock mode returns predefined assessments for the four synthetic examples.
+Mock mode returns predefined sample assessments for the four synthetic
+examples.
 
-It is intended for interface development and workflow testing without
-a running model.
+It is intended for UI development and workflow demonstrations without a
+running model.
 
 - Results are labeled simulated.
-- Edited or custom messages are rejected with an explanation.
-- The application does not silently replace failed inference with a
-  mock result.
+- Edited or custom input is rejected with an explanation.
+- Mock results are not presented as live model inference.
 
-Synthetic evidence and simulated analysis are different:
-
-- Synthetic input + actual model response demonstrates live inference.
-- Synthetic input + predefined response demonstrates the product workflow.
-
----
-
-## Demonstration Cases
+### Demonstration Cases
 
 The fixtures cover:
 
@@ -209,52 +221,48 @@ The fixtures cover:
 3. A legitimate-looking request requiring context.
 4. An ambiguous urgent message.
 
-Fixtures must not contain actual passwords, verification codes, private
-conversations, or real payment details.
+The examples are fictional and must not contain real passwords,
+verification codes, private chats, or payment credentials.
 
-Mock assessments are examples, not accuracy measurements or ground
-truth for evaluating the live model.
+Mock assessments are not measured accuracy results.
 
 ---
 
 ## Family Verification
 
-Family Verification is a manual safety workflow, not an automated
-identity check.
+Family Verification is a manual independent-checking workflow—not an
+automated identity-verification system.
 
 It guides the user to:
 
 1. Pause before sending money.
-2. Contact the person using a number known before the suspicious message.
-3. Avoid relying solely on the same WhatsApp conversation if compromise
-   may be possible.
-4. Check with another trusted relative or independent channel.
-5. Use the family’s agreed offline verification method, if one exists.
-6. Record what they personally confirmed.
+2. Contact the person through a number known before the message arrived.
+3. Avoid relying only on the same WhatsApp conversation if account
+   compromise may be possible.
+4. Check through another trusted relative or independent channel.
+5. Use an agreed offline family-verification method, if one exists.
+6. Record the outcome of the check.
 
-Rasta does not collect or store family code words.
+Rasta does not collect, store, or transmit family code words.
 
-It does not treat a familiar voice, delivered message, or completed
+It does not treat a familiar voice, message delivery, or a completed
 checklist as proof of identity.
 
-### User-Recorded Outcomes
+### User-Recorded Statuses
 
-The workflow records statuses such as:
+- `not_checked`
+- `attempting_independent_contact`
+- `user_recorded_confirmation`
+- `user_recorded_denial`
+- `inconclusive`
 
-- Not checked.
-- Attempting independent contact.
-- User-recorded confirmation.
-- User-recorded denial.
-- Inconclusive.
+These statuses reflect what the user reported. Rasta does not
+independently verify them.
 
-These are user reports, not independent findings by Rasta.
+Recording a confirmation does not automatically clear the assessment.
 
-Completing the workflow does not automatically clear the model’s
-assessment.
-
-If a genuine emergency may exist, users should seek independent help
-rather than dismiss the situation solely because a message appears
-suspicious.
+If a genuine emergency may exist, seek independent help rather than
+dismissing it solely because a message appears suspicious.
 
 ---
 
@@ -270,7 +278,8 @@ http://127.0.0.1:5173
 FastAPI
 http://127.0.0.1:8000
         |
-        | Input validation and best-effort redaction
+        | Input validation
+        | Best-effort redaction
         | One active inference at a time
         v
 AnalysisProvider
@@ -289,22 +298,22 @@ AnalysisProvider
                 v
             Predefined synthetic assessments
 
-Backend result checks
+Backend output validation
         |
-        +-- Pydantic schema validation
-        +-- Quote-in-input checks
-        +-- Amount-in-input checks
+        +-- Pydantic schema checks
+        +-- Quote-in-input verification
+        +-- Amount-in-input verification
         |
         v
 Temporary in-memory case store
         |
-        +-- Assessment view
-        +-- Verification timeline
-        +-- HTML incident export / Print to PDF
+        +-- Assessment screen
+        +-- Manual verification timeline
+        +-- Print-friendly incident export
 ```
 
-Model output is treated as data. It cannot execute code, select
-notification recipients, or trigger external actions.
+Model output is data only. It cannot execute code, send notifications,
+or trigger external actions.
 
 ---
 
@@ -313,14 +322,14 @@ notification recipients, or trigger external actions.
 | Layer | Technology |
 |---|---|
 | Frontend | React, Vite, TypeScript, Tailwind CSS |
-| Backend | FastAPI, Python, Pydantic |
+| Backend | Python, FastAPI, Pydantic |
 | Local inference | Ollama with Meta Llama |
-| Current storage | In-memory backend store |
-| Export | Server-built, HTML-escaped, print-friendly HTML |
-| Optional future persistence | Firebase Auth and Cloud Firestore |
+| Current storage | Backend memory |
+| Incident export | Server-built, HTML-escaped, print-friendly HTML |
+| Planned persistence | Firebase Authentication and Cloud Firestore |
 
-No Docker, WSL, vector database, or multi-agent orchestration framework
-is required for the current workflow.
+The current workflow does not require Docker, WSL, a vector database,
+or a multi-agent orchestration framework.
 
 ---
 
@@ -328,34 +337,37 @@ is required for the current workflow.
 
 Target environment: Windows 10/11 with PowerShell.
 
-- Python 3.10 or newer; development tests used Python 3.12.
-- Node.js compatible with the repository’s installed Vite version.
-  The current project specifies Node 20.19+ or 22.12+ and was developed
-  with Node 22.
+- Python 3.10+; development tests used Python 3.12.
+- Node.js compatible with the installed Vite version.
+  The project specifies Node 20.19+ or 22.12+ and was developed with
+  Node 22.
 - [Ollama for Windows](https://ollama.com/download/windows).
 - Sufficient free disk space for dependencies and model weights.
-- Available RAM for the model, its runtime context, operating system,
-  browser, and development tools.
+- Available memory for the operating system, browser, backend, model,
+  and runtime context.
 
 ### Hardware Expectations
 
-The application is intended to be tested with a small CPU-run model.
+The intended target machine has:
 
-There is no validated minimum-RAM or latency claim for the target PC.
-Model file size is not the same as runtime memory consumption.
+- AMD Ryzen 5 PRO 3400G.
+- Four CPU cores / eight threads.
+- Approximately 9.9 GB usable system RAM.
+- No verified GPU acceleration.
 
-Close unnecessary applications before testing. If 3B inference is not
-practical, explicitly configure the 1B model and document which model
-was actually tested.
+There is no validated minimum-RAM or latency claim for this machine.
 
-The 1B and 3B configurations must be evaluated rather than assumed
-equivalent in quality.
+Model download size is not the same as runtime memory usage. Close
+unnecessary applications before testing.
+
+If the 3B model is not practical, explicitly configure the 1B model and
+document that choice. Do not assume equivalent assessment quality.
 
 ---
 
 ## Setup
 
-Run commands from the repository root unless a step changes directory.
+Run these commands from the repository root unless directed otherwise.
 
 ### 1. Install the Model
 
@@ -366,15 +378,15 @@ ollama pull llama3.2:3b
 ollama list
 ```
 
-For the smaller alternative:
+Smaller alternative:
 
 ```powershell
 ollama pull llama3.2:1b
 ```
 
-The application never downloads model weights automatically.
+The application does not download model weights automatically.
 
-Make sure Ollama is running before attempting live analysis.
+Ensure Ollama is running before live analysis.
 
 ### 2. Start the Backend
 
@@ -391,15 +403,15 @@ Copy-Item .env.example .env
 python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
 ```
 
-If PowerShell blocks virtual-environment activation, and local policy
-permits it, a process-scoped setting can be used:
+If PowerShell blocks virtual-environment activation and local policy
+permits it:
 
 ```powershell
 Set-ExecutionPolicy -Scope Process Bypass
 .\.venv\Scripts\Activate.ps1
 ```
 
-Edit `backend/.env` before starting the backend if you want a different
+Edit `backend/.env` before starting the backend if selecting another
 provider or installed model.
 
 ### 3. Start the Frontend
@@ -430,15 +442,14 @@ Open:
 http://127.0.0.1:8000/api/model-status
 ```
 
-The endpoint reports states such as:
+Expected states include:
 
 - `ready`
 - `model_not_installed`
 - `unreachable`
 - `mock`
 
-A ready status indicates availability checks passed. It does not replace
-an end-to-end inference test.
+A ready status does not replace an end-to-end inference test.
 
 ---
 
@@ -457,23 +468,15 @@ Backend configuration: `backend/.env`.
 | `PERSISTENCE_MODE` | `memory` | Only implemented persistence mode |
 | `FRONTEND_ORIGIN` | `http://localhost:5173` | Configured CORS origin |
 
-The correction retry has its own timeout. A failed first request followed
-by a retry can therefore take longer than a single timeout period.
+The correction retry has its own timeout. A failed request followed by
+a retry may therefore take longer than one timeout period.
 
 Keep the configured origin consistent with the frontend address when
-making cross-origin requests. The development setup normally uses the
-Vite proxy.
+making cross-origin requests. The development setup uses the Vite proxy.
 
 Restart the backend after changing environment variables.
 
-### Enable Mock Mode
-
-```dotenv
-AI_PROVIDER=mock
-PERSISTENCE_MODE=memory
-```
-
-### Enable Local Inference
+### Local Inference
 
 ```dotenv
 AI_PROVIDER=ollama
@@ -482,42 +485,57 @@ OLLAMA_MODEL=llama3.2:3b
 PERSISTENCE_MODE=memory
 ```
 
-There is no silent fallback between providers.
+### Mock Mode
+
+```dotenv
+AI_PROVIDER=mock
+PERSISTENCE_MODE=memory
+```
+
+There is no silent provider fallback.
 
 ---
 
 ## Assessment Validation
 
-The backend performs structural and evidence-consistency checks:
+The backend checks:
 
-- Pydantic schema and enum validation.
-- Rejection of unexpected fields.
+- Schema and allowed enum values.
+- Unexpected fields.
 - Field-length limits.
-- Maximum three warning signals and three recommended actions.
-- Verification that each source quote appears in the analyzed text.
-- Removal and counting of unsupported quotes.
-- Clearing an extracted amount that is not present in the input.
+- A maximum of three warning signals.
+- A maximum of three recommended actions.
+- Whether each source quote appears in the analyzed text.
+- Whether an extracted amount appears in the input.
 
-The backend also applies best-effort masking of code-like values,
-CNIC-like patterns, and long numbers before inference.
+Unsupported quotes are removed and counted. Unsupported amounts are
+cleared.
 
-### Important Limitations of These Checks
+The backend applies best-effort masking of code-like values, CNIC-like
+patterns, and long numbers before inference.
 
-These checks do not establish that the model’s interpretation is correct.
+### What These Checks Do Not Prove
 
-The current checks do not alter the model’s concern band. If supporting
-quotes are removed, the remaining concern band should not be interpreted
-as independently validated.
+Structural validation is not semantic validation.
 
-Redaction can miss sensitive content or remove useful context, including
-numbers relevant to a request. Users should not submit actual passwords,
-PINs, or verification codes.
+A valid JSON response can still contain incorrect reasoning, misleading
+advice, or an inappropriate concern band.
+
+The current checks do not alter the model’s concern band. This
+implementation does not claim a tested deterministic rule that forces
+all login-code requests into a particular concern band.
+
+If evidence quotes are removed, the remaining assessment should not be
+treated as independently validated.
+
+Redaction may miss sensitive information or remove useful context.
+Do not paste actual passwords, PINs, or login verification codes.
 
 ---
 
 ## Testing
 
-### Backend Tests
+### Backend
 
 From `backend/`:
 
@@ -527,15 +545,15 @@ pytest -q
 
 These tests use mocked Ollama HTTP responses and do not require a model.
 
-Opt-in local inference tests:
+Opt-in live tests:
 
 ```powershell
 pytest -m live -s
 ```
 
-Live tests record latency; they do not establish detection accuracy.
+Live tests record latency. They do not establish fraud-detection accuracy.
 
-### Frontend Tests
+### Frontend
 
 From `frontend/`:
 
@@ -546,123 +564,130 @@ npm run build
 
 ### Recorded Results
 
-The following results were recorded in a Linux sandbox using Python 3.12
-and Node 22, not on the target Windows machine:
+The recorded results below were obtained in a Linux sandbox with
+Python 3.12 and Node 22—not on the target Windows machine.
 
 - Backend: `44 passed`, with `2 live tests deselected`.
 - Frontend: `4 passed` using jsdom and stubbed fetch.
 - Frontend production build: succeeded.
-- Manual backend HTTP check:
+- Manual backend HTTP checks:
   - Mock mode returned simulated assessments.
-  - Mock mode rejected edited fixture input.
-  - Ollama mode without Ollama returned HTTP 503
+  - Edited fixture text was rejected in mock mode.
+  - Ollama mode without a running Ollama instance returned HTTP 503
     `model_unavailable`.
 
-Live inference has not yet been run.
+Live inference has not been run in these recorded results.
 
-Observed latency, Windows performance, and Roman Urdu model quality
-remain unknown.
+Windows performance, actual latency, and Roman Urdu model quality remain
+unverified.
 
 ### Manual Browser Checklist
 
 Before recording or submitting:
 
-- [ ] Load each synthetic example.
-- [ ] Analyze in clearly labeled mock mode.
-- [ ] Edit a sample and confirm its old assessment disappears.
-- [ ] Run actual inference with the installed Meta model.
+- [ ] Load all four synthetic examples.
+- [ ] Check clearly labeled mock assessments.
+- [ ] Edit a sample and confirm the old assessment disappears.
+- [ ] Complete actual inference with the installed Meta model.
 - [ ] Test a custom message.
-- [ ] Stop Ollama and confirm “Processing failed” is shown.
+- [ ] Stop Ollama and confirm a processing error is shown.
 - [ ] Copy a safe reply.
 - [ ] Record verification outcomes.
 - [ ] Export and print an incident record.
 - [ ] Delete/reset a case.
 - [ ] Test a narrow mobile layout.
 - [ ] Toggle English / Roman Urdu.
+- [ ] Review language quality.
 - [ ] Record the exact tested model and observed limitations.
 
-These browser checks have not yet been completed manually.
+These checks have not yet been completed manually.
 
 ---
 
 ## Privacy and Security
 
-- Inference is configured to use a loopback Ollama endpoint.
-- Cases are held in backend memory and disappear on restart.
-- The application does not persist the original raw message.
-- Exported records may still contain sensitive information in derived
-  fields or evidence excerpts; review before sharing.
+- Analysis is configured to use a loopback Ollama instance.
+- Cases are stored in backend memory and disappear on restart.
+- The original raw message is not persisted.
 - No `localStorage` persistence is used.
-- Backend logs are intended to contain request metadata, not message
-  bodies or model output.
-- No links from messages are automatically fetched.
-- Model-generated content is not executed.
-- Incident HTML is escaped before rendering.
+- Logs are intended to contain request metadata, not message bodies
+  or model output.
+- Links from messages are not automatically fetched.
+- Model output is not executed.
+- Exported HTML is escaped.
 
-### Local Demo Only
+Derived fields and evidence excerpts can still contain sensitive
+information. Review an incident record before sharing it.
 
-The current application is a single-user local demonstration.
+Local inference does not by itself eliminate every privacy or security
+risk.
 
-There is no authentication on case endpoints. Loopback binding is a
-deployment boundary, not a replacement for authorization.
+### Local Demonstration Only
+
+The current application is a single-user local demo.
+
+Case endpoints do not have authentication. Loopback binding is not a
+replacement for authorization.
 
 Do not expose the backend or Ollama directly to the internet.
 
-A public deployment requires authentication, ownership enforcement,
-deployment security review, and a suitable inference-hosting plan.
+Public deployment requires authentication, ownership enforcement,
+deployment review, and an appropriate inference-hosting plan.
 
 ---
 
 ## Incident Export
 
-The export is a print-friendly advisory record, not a forensic report or
-an official complaint.
+The incident record is advisory. It is not:
 
-It should identify:
+- A forensic report.
+- An official complaint.
+- A verified identity record.
+- Proof that fraud occurred.
+- A certification that payment is safe.
 
-- The case and timestamp.
+The export should identify:
+
+- Case ID and timestamp.
 - Whether the input was synthetic.
 - Whether the assessment was mocked or model-generated.
-- The selected provider and model.
-- Observed facts and warning signals.
-- Uncertainty.
+- Provider and configured model.
+- Observed facts.
+- Warning signals and uncertainty.
 - Recommended actions.
 - User-recorded verification events.
 
-It does not certify that fraud occurred or that a sender’s identity was
-verified.
+Review the export for sensitive content before sharing it.
 
 ---
 
-## What Makes Rasta Different?
+## Proposed Differentiation
 
-Rasta’s proposed focus is the connection between analysis and independent
-verification for Pakistani users.
+Rasta focuses on the transition from a warning to an independent check.
 
-The workflow combines:
+Its proposed contribution combines:
 
 - English / Roman Urdu presentation.
 - Evidence-grounded explanations.
 - Explicit uncertainty.
 - A calm reply to copy.
-- Manual independent family verification.
+- A manual family-verification workflow.
 - A record of the user’s own confirmation process.
 
-This is a product hypothesis, not a claim that no existing product offers
-similar capabilities.
+It does not claim that no competing product offers similar features.
 
-Further user research and comparative testing are needed to establish
-whether the workflow improves decisions over a warning label alone.
+Further user research and comparative evaluation are needed to determine
+whether this workflow improves decisions over a concern label alone.
 
 ---
 
 ## Future Direction: User-Initiated WhatsApp Access
 
 A future version could explore a WhatsApp Business Platform experience
-where users deliberately send suspicious content to Rasta for guidance.
+where users deliberately send suspicious content to Rasta.
 
-The goal would be to bring independent verification closer to the place
-where the suspicious request arrives.
+The aim would be to bring verification closer to where the suspicious
+request arrives.
 
 This is not implemented in the current prototype.
 
@@ -670,7 +695,7 @@ It would require review of platform policies, consent, privacy,
 deployment, inference hosting, and operational requirements.
 
 It would not provide background access to private conversations or
-guarantee a native WhatsApp integration.
+guarantee native integration into WhatsApp.
 
 Rasta is not an official Meta or WhatsApp safety feature.
 
@@ -687,28 +712,28 @@ A future persistence layer may use:
 - Backend ID-token verification.
 - Per-user ownership checks.
 - Restrictive client security rules.
-- Minimal, redacted saved results.
+- Minimal redacted saved results.
 
-The current application accepts only:
+Currently, only this persistence mode is supported:
 
 ```dotenv
 PERSISTENCE_MODE=memory
 ```
 
-If cloud persistence is introduced, the privacy statement must clearly
-explain what leaves the local machine.
+If cloud persistence is added, update the privacy statement to explain
+exactly what leaves the local machine.
 
 ---
 
 ## Deferred Features
 
-- Screenshot analysis and OCR.
+- Screenshot understanding and OCR.
 - Voice transcription.
 - Deepfake detection.
 - Automated WhatsApp or SMS alerts.
 - Trusted-contact enrollment.
 - Bank integrations.
-- Link fetching and reputation checks.
+- Link reputation checks.
 - Automatic complaints or reports.
 - Additional model families.
 
@@ -718,22 +743,25 @@ These are not current capabilities.
 
 ## Submission Checklist
 
-- [ ] Complete a successful local inference run.
-- [ ] Update the exact tested model tag.
+- [ ] Run successful local inference.
+- [ ] Record the exact tested model tag and identifier.
 - [ ] Update `docs/live-test-log.md`.
-- [ ] Record actual latency and language limitations.
-- [ ] Complete the manual browser checklist.
-- [ ] Ensure the video distinguishes synthetic inputs from mock outputs.
-- [ ] Ensure README, demo, and submission claims match the code.
-- [ ] Review exports for sensitive content.
-- [ ] Check the current Cerebral Valley submission requirements.
+- [ ] Record observed latency and language limitations.
+- [ ] Complete manual browser testing.
+- [ ] Ensure the video distinguishes synthetic inputs from mock output.
+- [ ] Remove any unverified feature or performance claims.
+- [ ] Confirm the README, video, and form describe the same build.
+- [ ] Review the public repository for secrets.
+- [ ] Confirm the repository and video are accessible to judges.
+- [ ] Check current Cerebral Valley submission requirements.
 - [ ] Update `SUBMISSION_NOTES.md`.
 
-See [SUBMISSION_NOTES.md](SUBMISSION_NOTES.md) for a plain account of
-what is implemented, synthetic, mocked, deferred, and untested.
+See [SUBMISSION_NOTES.md](SUBMISSION_NOTES.md) for an account of what is
+implemented, synthetic, mocked, deferred, and untested.
 
 ---
 
 Rasta provides safety guidance, not guaranteed detection.
 
 Pause. Verify. Proceed.
+````
