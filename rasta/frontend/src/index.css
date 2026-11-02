@@ -1,0 +1,4 @@
+@import "tailwindcss";
+html { -webkit-text-size-adjust: 100%; }
+body { background: #f8fafc; color: #0f172a; font-family: system-ui, "Segoe UI", Roboto, Arial, sans-serif; }
+button:focus-visible, textarea:focus-visible, a:focus-visible { outline: 3px solid #0f766e; outline-offset: 2px; }
