@@ -12,3 +12,14 @@ Things worth noting while testing:
 - Roman Urdu: are explanations understandable? Is meaning preserved?
 - Any harmful false reassurance (e.g. the verification-code example not flagged)?
 - Peak RAM and whether the 3B tag is usable on your machine; if not, try `llama3.2:1b`.
+
+## Manual live-inference confirmation
+
+- Date recorded: November 2, 2026
+- Model: llama3.2:3b
+- Runtime: Ollama
+- Environment: Developer’s local Windows PC
+- Result: The application successfully received and displayed an
+  actual model-generated response.
+- Latency: Not formally measured.
+- Safety accuracy and Roman Urdu quality: Not formally evaluated.

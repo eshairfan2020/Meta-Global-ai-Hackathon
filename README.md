@@ -76,13 +76,12 @@ It does not automatically contact, accuse, or report anyone.
 This repository contains an implemented prototype with separate Ollama
 and mock providers.
 
-**Live model inference has not yet been verified in the recorded test
-results below.**
+**Live model inference has been tested locally on Windows. Earlier automated test results below were recorded separately in a Linux sandbox.**
 
 | Component | Current status |
 |---|---|
 | Text input and synthetic examples | Implemented |
-| Local Ollama provider | Implemented; live execution not yet verified |
+| Local Ollama provider | Implemented;  live inference tested locally on Windows |
 | Mock provider | Implemented for predefined synthetic cases |
 | Structured-output validation | Implemented |
 | Evidence-quote checks | Implemented |
@@ -134,7 +133,7 @@ an assessment of insufficient evidence.
 
 ### Live Verification
 
-**Exact model tag successfully tested: none recorded yet.**
+**Exact model tag successfully tested: llama3.2:3b through Ollama on Windows.**
 
 See [docs/live-test-log.md](docs/live-test-log.md).
 
@@ -576,7 +575,8 @@ Python 3.12 and Node 22—not on the target Windows machine.
   - Ollama mode without a running Ollama instance returned HTTP 503
     `model_unavailable`.
 
-Live inference has not been run in these recorded results.
+A subsequent manual test confirmed live inference on Windows using llama3.2:3b through Ollama.
+
 
 Windows performance, actual latency, and Roman Urdu model quality remain
 unverified.
